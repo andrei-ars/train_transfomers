@@ -51,7 +51,7 @@ class NerModel:
             #'no_cache': True,
             'evaluate_during_training' : True,
             
-            'num_train_epochs': 10, # 5
+            'num_train_epochs': 7, # 5
             'train_batch_size': 10, # 10   (<=10 for bert, <=5 for longformer)
             'eval_batch_size' : 10,
             'max_seq_length': 128,  # default 128
@@ -152,6 +152,8 @@ class NerModel:
         return res_val
 
     def test(self):
+        print("Testing the model on the testing dataset:\n")
+
         sentence_id = self.dataset['test']['sentence_id']
         words = self.dataset['test']['words']
         labels = self.dataset['test']['labels']

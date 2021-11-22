@@ -126,6 +126,7 @@ if __name__ == "__main__":
                 format(i, train_loss[i], val_loss[i], f1_score[i]))
 
     if mode in {"infer"}:
+        print("Infer Test.\n")
         print("Number of test_sentences:", len(test_sentences))
         result = model.raw_predict(test_sentences)
         time.sleep(5)
