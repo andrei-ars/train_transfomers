@@ -51,12 +51,12 @@ class NerModel:
             #'no_cache': True,
             'evaluate_during_training' : True,
             
-            'num_train_epochs': 8, # 5
+            'num_train_epochs': 15, # 5
             'train_batch_size': 10, # 10   (<=10 for bert, <=5 for longformer)
             'eval_batch_size' : 10,
             'max_seq_length': 128,  # default 128
             'gradient_accumulation_steps': 8,
-            'learning_rate': 0.0001, # default 4e-5; a good value is 0.0001 for albert
+            'learning_rate': 0.00005, # 0.0001  # default 4e-5; a good value is 0.0001 for albert
 
             #'max_position_embeddings': 64,
         }

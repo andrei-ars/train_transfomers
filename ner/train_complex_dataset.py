@@ -150,11 +150,12 @@ if __name__ == "__main__":
         predictions = model.predict([input_text])
         tokens, tags = split_token_tag(predictions[0])
         slots = ner_slot_filling(tokens, tags)
-        #compound_result = ner_slot_filling_compound(tokens, tags)
 
         print("text: {}\noutput: {}".format(input_text, predictions[0]))
         #print("slots: {}\n".format(slots))
-        print("compound_result: {}\n".format(compound_result))
+
+        #compound_result = ner_slot_filling_compound(tokens, tags)
+        #print("compound_result: {}\n".format(compound_result))
 
         print("\n RAW:")
         results = model.raw_predict([input_text])
