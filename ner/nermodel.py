@@ -51,9 +51,9 @@ class NerModel:
             #'no_cache': True,
             'evaluate_during_training' : True,
             
-            'num_train_epochs': 5, # 5
-            'train_batch_size': 4, # 10   (<=10 for bert, <=4 for longformer)
-            'eval_batch_size' : 3,
+            'num_train_epochs': 15, # 5
+            'train_batch_size': 10, # 10   (<=10 for bert, <=4 for longformer)
+            'eval_batch_size' : 10,
             'max_seq_length': 128,  # default 128
             'gradient_accumulation_steps': 8,
             'learning_rate': 0.00005, # 0.0001  # default 4e-5; a good value is 0.0001 for albert
@@ -71,7 +71,7 @@ class NerModel:
         #self.model = NERModel("layoutlm", 'microsoft/layoutlm-base-uncased', use_cuda=False, args=model_args)
         #self.model = NERModel("distilbert", "distilbert-base-cased-distilled-squad", use_cuda=False, args=model_args)
 
-        model_type, english_model_name  = "longformer", "allenai/longformer-base-4096"
+        #model_type, english_model_name  = "longformer", "allenai/longformer-base-4096"
         #model_type, english_model_name  = "mpnet", "microsoft/mpnet-base"
         #model_type, english_model_name  = "electra", "google/electra-small-discriminator"
         #model_type, english_model_name  = "squeezebert", "squeezebert/squeezebert-uncased"
@@ -79,7 +79,7 @@ class NerModel:
         #model_type, english_model_name  = "xlmroberta", "xlm-roberta-base"
         #model_type, english_model_name  = "bert", "bert-base-uncased"
         #model_type, english_model_name  = "distilbert", "distilbert-base-uncased"
-        #model_type, english_model_name  = "roberta", "distilroberta-base"
+        model_type, english_model_name  = "roberta", "distilroberta-base"
 
         if input_dir:
             # Use a previously trained model (on NER or LM tasks)
