@@ -51,12 +51,12 @@ class NerModel:
             #'no_cache': True,
             'evaluate_during_training' : True,
             
-            'num_train_epochs': 20, # 5
+            'num_train_epochs': 10, # 5
             'train_batch_size': 10, # 10   (<=10 for bert, <=4 for longformer)
             'eval_batch_size' : 10,
             'max_seq_length': 128,  # default 128
             'gradient_accumulation_steps': 8,
-            'learning_rate': 0.00005, # 0.0001  # default 4e-5; a good value is 0.0001 for albert
+            'learning_rate': 0.0001, # 0.0001  # default 4e-5; a good value is 0.0001 for albert
 
             #'max_position_embeddings': 64,
         }
@@ -154,66 +154,71 @@ class NerModel:
     def test(self):
         print("Testing the model on the testing dataset:\n")
 
-        sentence_id = self.dataset['test']['sentence_id']
-        words = self.dataset['test']['words']
-        labels = self.dataset['test']['labels']
-        
-        prev_id = 0
-        s_words = []
-        s_labels = []
-        samples = []
+        avg_acc = {}
+        avg_success = {}
 
-        for i in range(len(sentence_id)):
-            s_id = sentence_id[i]
-            word = words[i]
-            label = labels[i]
+        for mode in ['train', 'test']
 
-            if s_id != prev_id:
-                sentence = " ".join(s_words)
-                #print("sentence id={}: {}".format(prev_id, sentence))
-                samples.append({'text': sentence, 'tokens': s_words, 'labels': s_labels})
-                #print("s_labels: {}".format(s_labels))
-                s_words = []
-                s_labels = []
-                prev_id = s_id
-
-            s_words.append(words[i])
-            s_labels.append(labels[i])
-            #print("i={}, word={}, label={}".format(s_id, word, label))
-
-        sentence = " ".join(s_words)
-        #print("sentence id={}: {}".format(prev_id, sentence))
-        samples.append({'text': sentence, 'tokens': s_words, 'labels': s_labels})
-
-        texts = [sample['text'] for sample in samples]
-        predictions, raw_outputs = self.model.predict(texts)
-        #print(predictions)
-
-        acc_list = []
-        success_list = []
-
-        # More detailed preditctions
-        for i, (preds, raw_outs) in enumerate(zip(predictions, raw_outputs)):
-            print()
-            print("text: ", texts[i])
-            #print("\npreds: ", preds)
-            pred_labels = [list(t.values())[0] for t in preds]
-            print("pred_labels: ", pred_labels)
-            true_labels = samples[i]['labels']
-            print("true_labels: ", true_labels)
-            #print("raw_outs: ", raw_outs)
+            sentence_id = self.dataset['test']['sentence_id']
+            words = self.dataset['test']['words']
+            labels = self.dataset['test']['labels']
             
-            if len(true_labels) != len(pred_labels):
-                raise Exception("len(true_labels) != len(pred_labels)")
-            comp = [true_labels[i] == pred_labels[i] for i in range(len(pred_labels))]
-            acc1sentence = np.mean(comp)
-            print("acc={:.3f}".format(acc1sentence))
-            acc_list.append(acc1sentence)
-            success = 1 if acc1sentence == 1.0 else 0
-            success_list.append(success)
+            prev_id = 0
+            s_words = []
+            s_labels = []
+            samples = []
 
-        avg_acc = np.mean(acc_list)
-        avg_success = np.mean(success_list)
+            for i in range(len(sentence_id)):
+                s_id = sentence_id[i]
+                word = words[i]
+                label = labels[i]
+
+                if s_id != prev_id:
+                    sentence = " ".join(s_words)
+                    #print("sentence id={}: {}".format(prev_id, sentence))
+                    samples.append({'text': sentence, 'tokens': s_words, 'labels': s_labels})
+                    #print("s_labels: {}".format(s_labels))
+                    s_words = []
+                    s_labels = []
+                    prev_id = s_id
+
+                s_words.append(words[i])
+                s_labels.append(labels[i])
+                #print("i={}, word={}, label={}".format(s_id, word, label))
+
+            sentence = " ".join(s_words)
+            #print("sentence id={}: {}".format(prev_id, sentence))
+            samples.append({'text': sentence, 'tokens': s_words, 'labels': s_labels})
+
+            texts = [sample['text'] for sample in samples]
+            predictions, raw_outputs = self.model.predict(texts)
+            #print(predictions)
+
+            acc_list = []
+            success_list = []
+
+            # More detailed preditctions
+            for i, (preds, raw_outs) in enumerate(zip(predictions, raw_outputs)):
+                print()
+                print("text: ", texts[i])
+                #print("\npreds: ", preds)
+                pred_labels = [list(t.values())[0] for t in preds]
+                print("pred_labels: ", pred_labels)
+                true_labels = samples[i]['labels']
+                print("true_labels: ", true_labels)
+                #print("raw_outs: ", raw_outs)
+                
+                if len(true_labels) != len(pred_labels):
+                    raise Exception("len(true_labels) != len(pred_labels)")
+                comp = [true_labels[i] == pred_labels[i] for i in range(len(pred_labels))]
+                acc1sentence = np.mean(comp)
+                print("acc={:.3f}".format(acc1sentence))
+                acc_list.append(acc1sentence)
+                success = 1 if acc1sentence == 1.0 else 0
+                success_list.append(success)
+
+            avg_acc[mode] = np.mean(acc_list)
+            avg_success[mode] = np.mean(success_list)
 
         return {'avg_acc': avg_acc, 'avg_success': avg_success}
 

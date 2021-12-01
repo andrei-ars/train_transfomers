@@ -111,8 +111,10 @@ if __name__ == "__main__":
         #for i in range(len(predictions)):
         #    text = test_sentences[i]
         #    print("text: {}\noutput: {}\n".format(text, predictions[i]))
-        print("\navg acc={:.3f}".format(test_results['avg_acc']))
-        print("avg success={:.3f}".format(test_results['avg_success']))
+        print("\ntrain avg acc={:.3f}".format(test_results['train']['avg_acc']))
+        print("train avg success={:.3f}".format(test_results['train']['avg_success']))
+        print("\ntest avg acc={:.3f}".format(test_results['test']['avg_acc']))
+        print("test avg success={:.3f}".format(test_results['test']['avg_success']))
 
     if mode == "train":
         print("\ntraining_details:")
