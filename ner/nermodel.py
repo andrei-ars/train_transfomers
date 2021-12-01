@@ -157,11 +157,11 @@ class NerModel:
         avg_acc = {}
         avg_success = {}
 
-        for mode in ['train', 'test']
+        for mode in ['train', 'test']:
 
-            sentence_id = self.dataset['test']['sentence_id']
-            words = self.dataset['test']['words']
-            labels = self.dataset['test']['labels']
+            sentence_id = self.dataset[mode]['sentence_id']
+            words = self.dataset[mode]['words']
+            labels = self.dataset[mode]['labels']
             
             prev_id = 0
             s_words = []
