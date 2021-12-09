@@ -165,6 +165,7 @@ def train_model(model, dataset):
 
 
 
+
 def test_model(model, index_to_label):
 
     samples = [
@@ -273,9 +274,14 @@ if __name__ == "__main__":
             model_type="roberta", #"roberta", #"bert", 
             model_name="distilroberta-base", # "bert-base-cased"; "xlnet-base-cased"
             num_labels=num_labels,
-            args={"reprocess_input_data": True, 
+            args={  
+                    'save_eval_checkpoints': False,
+                    'save_model_every_epoch': False,
+                    'evaluate_during_training': True,
+                    "reprocess_input_data": True, 
                     "overwrite_output_dir": True,
-                    'num_train_epochs': 2,   # 5
+                    'learning_rate': 0.0001,
+                    'num_train_epochs': 5,   # 5
                     'train_batch_size': 32,  # 32 for bert (but >10 gives an error for longfomer)
                  },
             use_cuda=False
@@ -291,11 +297,6 @@ if __name__ == "__main__":
             args={"reprocess_input_data": True, "overwrite_output_dir": False},
             use_cuda=False
         )        
-
-    print("EVALUATION:")
-    result, model_outputs, wrong_predictions = model.eval_model(eval_df)
-    print("Eval. result:", result)
-    print()
 
     predictions, raw_outputs = model.predict(
             ["verify BOQ New Quote EOQ is visible on the page .",
