@@ -252,7 +252,7 @@ if __name__ == "__main__":
     num_labels = len(dataset.index_to_label)
     print("num_labels:", num_labels)
 
-    sys.exit()
+    #sys.exit()
 
     # Create a ClassificationModel
     #  model_name is set to None to train a Language Model from scratch.
