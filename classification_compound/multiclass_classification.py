@@ -209,6 +209,15 @@ def test_model(model, index_to_label):
 
        ('verify BOQ New Quote EOQ is visible on the page .', "VERIFY"),
        ('verify BOQ INSIDEQOUTES1 EOQ is visible on the page .', "VERIFY"),
+
+       ('click on the Email after navigate website Execute Test', "COMPOUND"),
+       ('Click on "cnbctv18" icon after entering in "Page 2 of 2"', "COMPOUND"),
+       ('Click on ABCdef icon and enter in No', "COMPOUND"),
+       ('Enter in "block while_loop", and click on "Steve" button', "COMPOUND"),
+       ('Enter the fields to login:\n input textfield 1\n block data_driven_block', "COMPOUND"),
+       ('Navigate to "secs" XTOKENARROW "sports events"', "COMPOUND"),
+       ('Go to "Leads" XTOKENARROW "logout"', "COMPOUND"),
+       ('Add the following information:\n1) username\n2) password', "COMPOUND"),
     ]
 
     input_texts = list(map(lambda x: x[0], samples))
@@ -256,6 +265,7 @@ if __name__ == "__main__":
 
     # Create a ClassificationModel
     #  model_name is set to None to train a Language Model from scratch.
+    print("TRAIN:")
     if mode == "train":
         model = ClassificationModel(
             #model_type="bert", #"roberta", #"bert", 
@@ -265,7 +275,7 @@ if __name__ == "__main__":
             num_labels=num_labels,
             args={"reprocess_input_data": True, 
                     "overwrite_output_dir": True,
-                    'num_train_epochs': 1,   # 5
+                    'num_train_epochs': 2,   # 5
                     'train_batch_size': 32,  # 32 for bert (but >10 gives an error for longfomer)
                  },
             use_cuda=False
@@ -282,6 +292,11 @@ if __name__ == "__main__":
             use_cuda=False
         )        
 
+    print("EVALUATION:")
+    result, model_outputs, wrong_predictions = model.eval_model(eval_df)
+    print("Eval. result:", result)
+    print()
+
     predictions, raw_outputs = model.predict(
             ["verify BOQ New Quote EOQ is visible on the page .",
              "Fill in text in BOQ Street Address line 1 EOQ ."]
@@ -289,4 +304,6 @@ if __name__ == "__main__":
     print("predictions:", predictions)
 
     test_model(model, dataset.index_to_label)
+
+
 
