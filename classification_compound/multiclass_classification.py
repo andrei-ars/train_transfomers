@@ -43,8 +43,7 @@ class ActionDataset():
 
         data = {}
         for mode in ['train', 'valid']:
-            data[mode] = [(x['text'], self.label_to_index(x['label']))
-                                                        for x in json_data[mode]]
+            data[mode] = [(x['text'], self.label_to_index[x['label']]) for x in json_data[mode]]
             print("mode {}: size={}".format(mode, len(data[mode])))
 
         return data
@@ -253,7 +252,7 @@ if __name__ == "__main__":
     num_labels = len(dataset.index_to_label)
     print("num_labels:", num_labels)
 
-    #sys.exit()
+    sys.exit()
 
     # Create a ClassificationModel
     #  model_name is set to None to train a Language Model from scratch.
