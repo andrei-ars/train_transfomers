@@ -39,7 +39,7 @@ class ActionDataset():
         data = {}
         for mode in ['train', 'valid']:
             data[mode] = [(x['text'], x['label']) for x in json_data[mode]]
-            print("mode {}: size={}".format(mode, data[mode]))
+            print("mode {}: size={}".format(mode, len(data[mode])))
 
         labels_set = {x['label'] for x in json_data['train']}
         labels = list(labels_set)
@@ -146,7 +146,13 @@ def train_model(model, dataset):
     #]
     eval_df = pd.DataFrame(dataset['valid'])
 
+    print("train_df:")
+    print(train_df)
+    print("eval_df:")
+    print(eval_df)
+
     # Train the model
+    print("Train the model")
     model.train_model(train_df)
 
     # Evaluate the model
@@ -245,6 +251,7 @@ if __name__ == "__main__":
     num_labels = len(dataset.index_to_label)
     print("num_labels:", num_labels)
 
+    sys.exit()
 
     # Create a ClassificationModel
     #  model_name is set to None to train a Language Model from scratch.
