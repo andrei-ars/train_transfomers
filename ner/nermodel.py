@@ -159,6 +159,8 @@ class NerModel:
 
         for mode in ['train', 'test']:
 
+            print("\n----------------\nmode={}\n".format(mode))
+
             sentence_id = self.dataset[mode]['sentence_id']
             words = self.dataset[mode]['words']
             labels = self.dataset[mode]['labels']
