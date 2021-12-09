@@ -18,12 +18,10 @@ class ActionDataset():
     def __init__(self, data_path, data_format="json"):
 
         if data_format == "json":
-            self.data, labels = self.load_from_json(data_path)
+            self.data = self.load_from_json(data_path)
         else:
             self.data = self.load_from_txt(data_path)
 
-        self.index_to_label = {index: label for index, label in enumerate(labels)}
-        self.label_to_index = {label: index for index, label in enumerate(labels)}
 
 
     def load_from_json(self, data_path):
@@ -36,16 +34,20 @@ class ActionDataset():
             with open(json_path) as fp:
                 json_data[mode] = json.load(fp)
 
-        data = {}
-        for mode in ['train', 'valid']:
-            data[mode] = [(x['text'], x['label']) for x in json_data[mode]]
-            print("mode {}: size={}".format(mode, len(data[mode])))
-
         labels_set = {x['label'] for x in json_data['train']}
         labels = list(labels_set)
         labels.sort()
+        self.index_to_label = {index: label for index, label in enumerate(labels)}
+        self.label_to_index = {label: index for index, label in enumerate(labels)}
 
-        return data, labels
+
+        data = {}
+        for mode in ['train', 'valid']:
+            data[mode] = [(x['text'], self.label_to_index(x['label']))
+                                                        for x in json_data[mode]]
+            print("mode {}: size={}".format(mode, len(data[mode])))
+
+        return data
 
 
     def load_from_txt(self, data_path):
