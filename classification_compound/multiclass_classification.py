@@ -305,7 +305,7 @@ if __name__ == "__main__":
                     "overwrite_output_dir": True,
                     #'learning_rate': 0.0001,
                     'learning_rate': 0.0005,
-                    'num_train_epochs': 3,   # 5
+                    'num_train_epochs': 5,   # 5
                     'train_batch_size': 32,  # 32 for bert (but >10 gives an error for longfomer)
                  },
             use_cuda=False
