@@ -130,8 +130,8 @@ class ActionDataset():
             return None
 
 
-def clear_checkpoints(self):
-    os.system("rm {}/checkpoint* -rf".format("outputs"))
+def clear_checkpoints(path="outputs"):
+    os.system("rm {}/checkpoint* -rf".format(path))
 
 
 def train_model(model, dataset):
@@ -303,8 +303,9 @@ if __name__ == "__main__":
                     'evaluate_during_training': True,
                     "reprocess_input_data": True, 
                     "overwrite_output_dir": True,
-                    'learning_rate': 0.0001,
-                    'num_train_epochs': 5,   # 5
+                    #'learning_rate': 0.0001,
+                    'learning_rate': 0.0005,
+                    'num_train_epochs': 1,   # 5
                     'train_batch_size': 32,  # 32 for bert (but >10 gives an error for longfomer)
                  },
             use_cuda=False
