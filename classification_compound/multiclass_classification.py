@@ -130,6 +130,10 @@ class ActionDataset():
             return None
 
 
+def clear_checkpoints(self):
+    os.system("rm {}/checkpoint* -rf".format("outputs"))
+
+
 def train_model(model, dataset):
 
     # Train and Evaluation data needs to be in a Pandas Dataframe containing at least two columns. If the Dataframe has a header, it should contain a 'text' and a 'labels' column. If no header is present, the Dataframe should contain at least two columns, with the first column is the text with type str, and the second column in the label with type int.
@@ -154,14 +158,33 @@ def train_model(model, dataset):
 
     # Train the model
     print("Train the model")
-    model.train_model(train_df, eval_df=eval_df)
+    global_step, training_details = model.train_model(train_df, eval_df=eval_df)
+    clear_checkpoints()
+    print("global_step:", global_step)
+    print("training_details:", training_details)
+    try:
+        f1_score = list(map(lambda x: round(x, 3), training_details['f1_score']))
+        precision = list(map(lambda x: round(x, 3), training_details['precision']))
+        recall = list(map(lambda x: round(x, 3), training_details['recall']))
+        train_loss = list(map(lambda x: round(x, 5), training_details['train_loss']))
+        eval_loss = list(map(lambda x: round(x, 5), training_details['eval_loss']))
+        print("\nTRAINING DETAILS:")
+        print("f1_score:", f1_score)
+        print("train_loss:", train_loss)
+        print("eval_loss:", eval_loss)
+    except:
+        logging.warning("Can not get training_details")
 
     # Evaluate the model
-    result, model_outputs, wrong_predictions = model.eval_model(eval_df)
-    print("result:", result)
-    print("model_outputs:", model_outputs)
-    print("wrong_predictions:", wrong_predictions)
-    return result, model_outputs, wrong_predictions
+    print("\nEVALUATION:")
+    result_train, model_outputs, wrong_predictions_train = model.eval_model(train_df)
+    result_valid, model_outputs, wrong_predictions_valid = model.eval_model(eval_df)
+    print("train result:", result_train)
+    print("valid result:", result_valid)
+    #print("model_outputs:", model_outputs)
+    print("train wrong_predictions:", wrong_predictions_train)
+    print("valid wrong_predictions:", wrong_predictions_valid)
+    return result_valid, model_outputs, wrong_predictions_valid
 
 
 
@@ -286,6 +309,7 @@ if __name__ == "__main__":
                  },
             use_cuda=False
         )        
+        
         train_model(model, dataset)
     
     elif mode == "infer":
