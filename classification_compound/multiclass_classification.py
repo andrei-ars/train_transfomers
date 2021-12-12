@@ -304,7 +304,7 @@ if __name__ == "__main__":
                     "reprocess_input_data": True, 
                     "overwrite_output_dir": True,
                     #'learning_rate': 0.0001,
-                    'learning_rate': 0.0005,
+                    'learning_rate': 0.0001,
                     'num_train_epochs': 5,   # 5
                     'train_batch_size': 32,  # 32 for bert (but >10 gives an error for longfomer)
                  },
