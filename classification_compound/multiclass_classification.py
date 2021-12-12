@@ -163,13 +163,11 @@ def train_model(model, dataset):
     print("global_step:", global_step)
     print("training_details:", training_details)
     try:
-        f1_score = list(map(lambda x: round(x, 3), training_details['f1_score']))
-        precision = list(map(lambda x: round(x, 3), training_details['precision']))
-        recall = list(map(lambda x: round(x, 3), training_details['recall']))
+        mcc = list(map(lambda x: round(x, 3), training_details['mcc']))
         train_loss = list(map(lambda x: round(x, 5), training_details['train_loss']))
         eval_loss = list(map(lambda x: round(x, 5), training_details['eval_loss']))
         print("\nTRAINING DETAILS:")
-        print("f1_score:", f1_score)
+        print("mcc:", mcc)
         print("train_loss:", train_loss)
         print("eval_loss:", eval_loss)
     except:
@@ -177,13 +175,15 @@ def train_model(model, dataset):
 
     # Evaluate the model
     print("\nEVALUATION:")
-    result_train, model_outputs, wrong_predictions_train = model.eval_model(train_df)
+    if len(train_df) > 2000:
+        train_df_2000 = train_df[:2000]
+    result_train, model_outputs, wrong_predictions_train = model.eval_model(train_df_2000)
     result_valid, model_outputs, wrong_predictions_valid = model.eval_model(eval_df)
     print("train result:", result_train)
     print("valid result:", result_valid)
     #print("model_outputs:", model_outputs)
-    print("train wrong_predictions:", wrong_predictions_train)
-    print("valid wrong_predictions:", wrong_predictions_valid)
+    #print("train wrong_predictions:", wrong_predictions_train)
+    #print("valid wrong_predictions:", wrong_predictions_valid)
     return result_valid, model_outputs, wrong_predictions_valid
 
 
@@ -305,7 +305,7 @@ if __name__ == "__main__":
                     "overwrite_output_dir": True,
                     #'learning_rate': 0.0001,
                     'learning_rate': 0.0005,
-                    'num_train_epochs': 1,   # 5
+                    'num_train_epochs': 3,   # 5
                     'train_batch_size': 32,  # 32 for bert (but >10 gives an error for longfomer)
                  },
             use_cuda=False
